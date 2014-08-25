@@ -85,6 +85,20 @@ class AresTl < Shortener
     end
 
 end
+class NqSt < Shortener
+    def get_short(url)
+        http=Net::HTTP.new("nq.st")
+        res =http.post("/", URI.encode_www_form({"url"=>url}))
+        lolilol=nil
+        res.body.each_line do |l|
+            if l=~/<a href="(http:\/\/nq.st\/[^"]+)">http:\/\/nq.st\/([^"]+)<\/a>/
+                lolilol = $1
+            end
+        end
+        return lolilol 
+    end
+
+end
 
 ######### GET
 class SCoop < Shortener
@@ -178,7 +192,7 @@ class Inception
             prev=res
             res=shortener.get_short(prev) 
             unless res
-                puts "#{shortener.name} REFUSED TO CONVERT #{prev}"
+                puts "Error With #{shortener.name} (asked to shorten #{prev})"
                 res=prev
             end
             puts "#{res} =>#{prev}" 
@@ -188,7 +202,7 @@ end
 
 i=Inception.new()
 
-#i.add_shortener(AresTl.new())
+#i.add_shortener(NqSt.new())
 #i.inception('http://www.free.fr')
 #exit
 
@@ -198,10 +212,12 @@ i.add_shortener(
                 CpcCx.new(),
                 GooGL.new(),
                 TwtFi.new(),
+                NqSt.new(),
                 UrlzFr.new(),
                 JoiNu.new(),
                 AresTl.new,
                 VGd.new(),
+                PpfrIt.new(),
                 TinyURL.new(),
                 VaMu.new(),
 #                DurlMe.new(),
