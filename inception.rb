@@ -71,6 +71,21 @@ class PpfrIt < Shortener
 
 end
 
+class AresTl < Shortener
+    def get_short(url)
+        http=Net::HTTP.new("ares.tl")
+        res =http.post("/", URI.encode_www_form({"url"=>url}))
+        lolilol=nil
+        res.body.each_line do |l|
+            if l=~/<h2>Votre lien court<\/h2>\s+<p><input id="copylink" class="texturl" size="32" value="([^"]+)" \/>/
+                lolilol = $1
+            end
+        end
+        return lolilol 
+    end
+
+end
+
 ######### GET
 class SCoop < Shortener
     def get_short(url)
@@ -172,25 +187,23 @@ class Inception
 end
 
 i=Inception.new()
-#i.add_shortener(UrlzFr.new())
+
+#i.add_shortener(AresTl.new())
 #i.inception('http://www.free.fr')
 #exit
 
 i.add_shortener(
-                VGd.new(),
-                CpcCx.new(),
+                AresTl.new(),
                 IsGd.new(),
                 CpcCx.new(),
                 GooGL.new(),
-                CpcCx.new(),
                 TwtFi.new(),
-                CpcCx.new(),
+                UrlzFr.new(),
                 JoiNu.new(),
-                CpcCx.new(),
+                AresTl.new,
+                VGd.new(),
                 TinyURL.new(),
-                CpcCx.new(),
                 VaMu.new(),
-                CpcCx.new(),
 #                DurlMe.new(),
                )
 i.inception("http://free.fr")
