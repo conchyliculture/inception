@@ -121,6 +121,13 @@ class IsGd < Shortener
     end
 end
 
+class VGd < Shortener
+    def get_short(url)
+        res=Net::HTTP.get(URI.parse("http://v.gd/create.php?format=simple&url=#{url}"))
+        return res
+    end
+end
+
 class Inception
     def initialize()
         @slist=[]
@@ -143,9 +150,8 @@ class Inception
 end
 
 i=Inception.new()
-
-
 i.add_shortener(
+                VGd.new(),
                 CpcCx.new(),
                 IsGd.new(),
                 CpcCx.new(),
