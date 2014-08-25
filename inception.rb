@@ -56,6 +56,21 @@ class CpcCx < Shortener
 
 end
 
+class PpfrIt < Shortener
+    def get_short(url)
+        http=Net::HTTP.new("ppfr.it")
+        res =http.post("/", URI.encode_www_form({"url"=>url}))
+        lolilol=nil
+        res.body.each_line do |l|
+            if l=~/ <p>URL raccourci: <code><a href="([^"]+)">/
+                lolilol = $1
+            end
+        end
+        return lolilol 
+    end
+
+end
+
 ######### GET
 class SCoop < Shortener
     def get_short(url)
@@ -128,6 +143,13 @@ class VGd < Shortener
     end
 end
 
+class UrlzFr < Shortener
+    def get_short(url)
+        res=Net::HTTP.get(URI.parse("http://urlz.fr/api_new.php?url=#{url}"))
+        return res
+    end
+end
+
 class Inception
     def initialize()
         @slist=[]
@@ -150,6 +172,10 @@ class Inception
 end
 
 i=Inception.new()
+#i.add_shortener(UrlzFr.new())
+#i.inception('http://www.free.fr')
+#exit
+
 i.add_shortener(
                 VGd.new(),
                 CpcCx.new(),
