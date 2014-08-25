@@ -85,6 +85,21 @@ class AresTl < Shortener
     end
 
 end
+
+class PpirAt < Shortener
+    def get_short(url)
+        http=Net::HTTP.new("ppir.at")
+        res =http.post("/", URI.encode_www_form({"url"=>url}))
+        lolilol=nil
+        res.body.each_line do |l|
+            if l=~/<\/h2>\s+<p><input id="copylink" class="text" size="\d+" value="([^"]+)" \/>/
+                lolilol = $1
+            end
+        end
+        return lolilol 
+    end
+
+end
 class NqSt < Shortener
     def get_short(url)
         http=Net::HTTP.new("nq.st")
@@ -202,7 +217,7 @@ end
 
 i=Inception.new()
 
-#i.add_shortener(NqSt.new())
+#i.add_shortener(PpirAt.new())
 #i.inception('http://www.free.fr')
 #exit
 
@@ -215,6 +230,7 @@ i.add_shortener(
                 NqSt.new(),
                 UrlzFr.new(),
                 JoiNu.new(),
+                PpirAt.new(),
                 AresTl.new,
                 VGd.new(),
                 PpfrIt.new(),
